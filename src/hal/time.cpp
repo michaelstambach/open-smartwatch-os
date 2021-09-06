@@ -156,3 +156,20 @@ const char *OswHal::getWeekday(void) {
 
   return dayMap[wDay];
 }
+
+// these functions are essentially just wrappers for strftime
+
+void OswHal::getFormattedUTCTime(char *result, int size, char *format){
+  time_t rawtime = getUTCTime();
+  struct tm * timeinfo = gmtime(&rawtime);
+  strftime(result, size, format, timeinfo);
+}
+
+void OswHal::getFormattedLocalTime(char *result, int size, char *format){
+  time_t rawtime = getLocalTime();
+  // note that gmtime() is used with a local timestamp instead of using
+  // localtime() with a UTC timestamp to be consistent with how timezones
+  // are handled in the rest of the code
+  struct tm * timeinfo = gmtime(&rawtime);
+  strftime(result, size, format, timeinfo);
+}
