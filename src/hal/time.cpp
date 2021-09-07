@@ -159,17 +159,35 @@ const char *OswHal::getWeekday(void) {
 
 // these functions are essentially just wrappers for strftime
 
-void OswHal::getFormattedUTCTime(char *result, int size, char *format){
+void OswHal::getFormattedUTCTime(char *result, int size, const char *format){
+  char correctFormat[size];
+  // backwards compatibility for "old" date format config
+  if (strcmp(format, "mm/dd/yyyy") == 0 ){
+    strcpy(correctFormat, "%m/%d/%Y");
+  } else if (strcmp(format, "dd.mm.yyyy") == 0 ){
+    strcpy(correctFormat, "%d.%m.%Y");
+  } else {
+    strcpy(correctFormat, format);
+  }
   time_t rawtime = getUTCTime();
   struct tm * timeinfo = gmtime(&rawtime);
-  strftime(result, size, format, timeinfo);
+  strftime(result, size, correctFormat, timeinfo);
 }
 
-void OswHal::getFormattedLocalTime(char *result, int size, char *format){
+void OswHal::getFormattedLocalTime(char *result, int size, const char *format){
+  char correctFormat[size];
+  // backwards compatibility for "old" date format config
+  if (strcmp(format, "mm/dd/yyyy") == 0 ){
+    strcpy(correctFormat, "%m/%d/%Y");
+  } else if (strcmp(format, "dd.mm.yyyy") == 0 ){
+    strcpy(correctFormat, "%d.%m.%Y");
+  } else {
+    strcpy(correctFormat, format);
+  }
   time_t rawtime = getLocalTime();
   // note that gmtime() is used with a local timestamp instead of using
   // localtime() with a UTC timestamp to be consistent with how timezones
   // are handled in the rest of the code
   struct tm * timeinfo = gmtime(&rawtime);
-  strftime(result, size, format, timeinfo);
+  strftime(result, size, correctFormat, timeinfo);
 }

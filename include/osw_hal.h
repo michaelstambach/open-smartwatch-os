@@ -177,8 +177,8 @@ class OswHal {
   void getDate(uint32_t* day, uint32_t* weekDay);
   void getDate(uint32_t* day, uint32_t* month, uint32_t* year);
   const char* getWeekday(void);
-  void getFormattedUTCTime(char* result, int size, char* format);
-  void getFormattedLocalTime(char* result, int size, char* format);
+  void getFormattedUTCTime(char* result, int size, const char* format);
+  void getFormattedLocalTime(char* result, int size, const char* format);
   // Destructor
   ~OswHal(){};
 
